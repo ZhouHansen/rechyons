@@ -1,19 +1,23 @@
 import { Dispatch, AnyAction } from "redux";
 
+type ReducerType = { [key: string]: (state: any, action: AnyAction) => any };
+type initStateType = { [key: string]: { [key: string]: any } };
+
 class Rechyons {
   [key: string]: any;
+  initState: initStateType;
   constructor(
     name: string,
-    initState: { [key: string]: { [key: string]: any } },
+    initState: initStateType,
     private dispatch: Dispatch<AnyAction>
   ) {
     Object.keys(initState[name]).map(key => {
-      this[key] = name + key;
+      this[key] = (name + "/" + key) as string;
       return null;
     });
   }
 
-  update(name: string | { [k: string]: any }, payload: any) {
+  update(name: string | { [k: string]: any }, payload?: any) {
     if (typeof name === "object" && name !== null) {
       for (let key in name) {
         this.dispatch({ type: this[key], payload: name[key] });
@@ -24,20 +28,17 @@ class Rechyons {
   }
 }
 
-function reducerMapper(
-  initState: { [key: string]: { [key: string]: any } },
-  name: string
-) {
+function reducerMapper(initState: initStateType, name: string) {
   return Object.keys(initState[name]).reduce((sum, key) => {
     return {
       ...sum,
-      [name + key]: (
-        state = initState[name][key],
-        { type, payload }: { type: string; payload: any }
+      [name + "/" + key]: (
+        state: any = initState[name][key],
+        action: AnyAction
       ) => {
-        switch (type) {
-          case name + key: {
-            return payload;
+        switch (action.type) {
+          case name + "/" + key: {
+            return action.payload;
           }
           default:
             return state;
@@ -47,22 +48,23 @@ function reducerMapper(
   }, {});
 }
 
-rechyons.reducer = (initState: { [key: string]: { [key: string]: any } }) => {
-  return Object.keys(initState).reduce((sum, name) => {
-    return { ...sum, ...reducerMapper(initState, name) };
+rechyons.reducer = (initState: initStateType) => {
+  this.initState = initState;
+  return Object.keys(initState).reduce((sum: ReducerType, name) => {
+    return { ...sum, ...(reducerMapper(initState, name) as ReducerType) };
   }, {});
 };
 
-export default function rechyons(
-  initState: { [key: string]: { [key: string]: any } },
-  dispatch: Dispatch<AnyAction>
-) {
-  let r: { [key: string]: any } = Object.keys(initState).reduce((sum, name) => {
-    return {
-      ...sum,
-      [name]: new Rechyons(name, initState, dispatch)
-    };
-  }, {});
+export default function rechyons(dispatch: Dispatch<AnyAction>) {
+  let r: { [key: string]: Rechyons } = Object.keys(this.initState).reduce(
+    (sum, name) => {
+      return {
+        ...sum,
+        [name]: new Rechyons(name, this.initState, dispatch)
+      };
+    },
+    {}
+  );
 
   return r;
 }

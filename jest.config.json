@@ -2,6 +2,7 @@
   "transform": {
     "^.+\\.(t|j)sx?$": "ts-jest"
   },
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|test.tsx?)$",
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
 }
