@@ -165,7 +165,7 @@ export default rechyons(store.dispatch);
 
 `rechyons` has two function `rechyons.reducer()` and `rechyons()`.
 
-First, `rechyons.reducer()` takes your init state to generate `'user/name'`,`'user/age'`,`'animal/category'`,`'animal/weight'` four pair of action and reducer automatically! Then return the reducers to `redux.combineReducers` to create the store.
+First, `rechyons.reducer()` takes your init state to generate `'user/name'`, `'user/age'`, `'animal/category'`, `'animal/weight'` four pair of action and reducer automatically! Then return the reducers to `redux.combineReducers` to create the store.
 
 Then, the `rechyons()` swallow `store.dispatch` to call the designated actions.
 
