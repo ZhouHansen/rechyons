@@ -34,9 +34,9 @@ Redux has one disadvantage: it is painfully verbose. Each time we want to add a 
 
 Actually we bear this disadvantage for [several years](https://community.risingstack.com/repatch-the-simplified-redux/), and the situation seems to be getting worse.
 
-Let me give you an example, I want to add a like feature ❤ on the image people post in a social app like twitter:
-
 ### Verbose nightmare
+
+Let me give you an example, I want to add a like feature ❤ on the image people post in a social app like twitter. If you have the same nightmare, just omit this part~
 
 ```js
 export default {
@@ -212,8 +212,6 @@ export default connect(MapStateToProps)(TestComponent);
 To `MapStateToProps`, just treat `superstore` as your js object `initState`'s structure.To Change user's data, just call `superstore.user.update("name", "newname");`, or use a object if you have multiple datas to update once `superstore.user.update({name: "newname", age: 20});`.
 
 ## API
-
-Actually, the usage part is clear enough, `rechyons` is very easy to use.
 
 ### rechyons.reducer()
 
