@@ -20,7 +20,7 @@
 
 <center>有这样一个库让你在使用redux，无需再写reducers和actions，同时保持不可突变性</center>
 
-## Motivation
+## 动机
 
 <img width=450 src="./for_readme.png"/>
 
