@@ -43,10 +43,10 @@ It's time to rethink how to use redux. [Why you need no Redux Saga](https://medi
 Rechyons makes redux state easy to update and retrieve like normal js object，meanwhile keep its immutable.
 
 ```ts
-// 修改
+// update
 hyperstore.user.update({ name: "yourname" });
 
-// 取值
+// retrieve
 let username = hyperstore.user.name;
 ```
 
