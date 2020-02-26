@@ -40,6 +40,16 @@ It's time to rethink how to use redux. [Why you need no Redux Saga](https://medi
 
 ##### With `rechyons`, you no longer need the verbose lines above at all
 
+Rechyons makes redux state easy to update and retrieve like normal js object，meanwhile keep its immutable.
+
+```ts
+// 修改
+hyperstore.user.update({ name: "yourname" });
+
+// 取值
+let username = hyperstore.user.name;
+```
+
 ## Usage
 
 [Example](https://github.com/ZhouHansen/rechyons/tree/master/src) or [a little bigger app](https://github.com/ZhouHansen/dat-react-shopping-list)

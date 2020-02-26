@@ -39,6 +39,16 @@ Redux 有一个缺点: 它太啰嗦了，当你需要加一个小功能时，就
 
 ##### 通过`rechyons`, 你再也不用写上述的这一切了
 
+Rechyons 让 redux state 变得像一般 js object 一样容易修改和取值，同时保持它的 immutable。
+
+```ts
+// 修改
+hyperstore.user.update({ name: "yourname" });
+
+// 取值
+let username = hyperstore.user.name;
+```
+
 ## 使用
 
 [例子](https://github.com/ZhouHansen/rechyons/tree/master/src) 或者 [稍大一点的应用](https://github.com/ZhouHansen/dat-react-shopping-list)
