@@ -32,11 +32,176 @@ Redux has one disadvantage: it is painfully verbose. Each time we want to add a 
 - action handlers in the reducer
 - ...
 
-Actually we bear this disadvantage for [several years](https://community.risingstack.com/repatch-the-simplified-redux/), and the situation seems to be getting worse.
+Actually we bear this disadvantage for [several years](https://community.risingstack.com/repatch-the-simplified-redux/), and the situation seems to be getting worse. See [verbose nightmare](https://github.com/ZhouHansen/rechyons#verbose-nightmare)
+
+##### With `rechyons`, you no longer need the verbose lines above at all.
+
+### Usage
+
+[Example](https://github.com/ZhouHansen/rechyons/tree/master/src) or [dat-react-shopping-list](https://github.com/ZhouHansen/dat-react-shopping-list)
+
+```
+$ git clone git@github.com:ZhouHansen/rechyons.git
+$ cd rechyons/example
+$ yarn install
+$ yarn start
+```
+
+### Principle (8 minutes to read, easy than you imagine)
+
+### Install
+
+Support both typescript and javascript
+
+```sh
+$ npm install rechyons
+```
+
+### Antecedent
+
+```json
+// your app tsconfig.json
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
+```
+
+### Setup redux store and rechyons
+
+`rechyons` generate action and reducer for each of the state fields. Shape your initState's structure to this:
+
+```
+{
+  moduleA: {keyA, keyB, keyC},
+  moduleB: {keyA, keyB, keyC},
+}
+```
+
+`rechyons` exports two functions `rechyons.reducer()` and `rechyons()`.
+
+`rechyons.reducer()` takes your init state to generate `'user/name'`, `'user/age'`, `'animal/category'`, `'animal/weight'` four pair of action and reducer automatically. Then return the reducers to `redux.combineReducers` to create the store.
+
+`rechyons()` swallows `store.dispatch` for calling the designated actions.
+
+```ts
+// store.ts
+import { createStore, combineReducers } from "redux";
+
+import rechyons from "rechyons";
+
+let initState = {
+  // moduleA
+  user: {
+    name: "zhc",
+    age: 10
+  },
+  // moduleB
+  animal: {
+    category: "dog",
+    weight: 10
+  }
+};
+
+export let store = createStore(combineReducers(rechyons.reducer(initState)));
+
+export default rechyons(initState, store.dispatch);
+```
+
+### Get, bind and update state in component
+
+`rechyons(initState, store.dispatch)` returns a `hyperstore`, `hyperstore.user` and `hyperstore.animal` both are instances of `Rechyons` class.
+
+```ts
+// TestComponent
+import React from "react";
+import { connect } from "react-redux";
+import hyperstore from "./store";
+
+export interface Props {
+  name: string;
+}
+
+class TestComponent extends React.Component<Props, {}> {
+  constructor(props: Props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <button
+          data-testid="button"
+          onClick={() => {
+            hyperstore.user.update("name", "abc");
+          }}
+        >
+          {this.props.name}
+        </button>
+      </div>
+    );
+  }
+}
+
+const MapStateToProps = store => {
+  return {
+    name: store[hyperstore.user.name]
+  };
+};
+
+export default connect(MapStateToProps)(TestComponent);
+```
+
+#### Get data from state
+
+`store[hyperstore.user.name]` equals to `initState.user.name` which is "zhc";
+`store[hyperstore.animal.weight]` equals to `initState.animal.weight` which is 10; So we can use this to `MapStateToProps()`
+
+#### Update state
+
+Use `hyperstore.user.update("name", "abc")` or `hyperstore.user.update({"name": "abc"})`
+
+## API
+
+### rechyons.reducer()
+
+```ts
+type ReducerType = { [key: string]: (state: any, action: AnyAction) => any };
+type initStateType = { [key: string]: { [key: string]: any } };
+
+rechyons.reducer: (initState: initStateType) => ReducerType
+```
+
+`rechyons.reducer()` return the reducers generated from initstate, so it only devotes to create redux store.
+
+```ts
+export let store = createStore(combineReducers(rechyons.reducer(initState)));
+```
+
+### rechyons()
+
+```ts
+rechyons: (initState: initStateType, dispatch: Dispatch<AnyAction>) => { [key: string]: Rechyons }
+```
+
+Each value of `hyperstore` is a Rechyons instance
+
+```ts
+import hyperstore, { store } from "./store";
+let hyperstore = rechyons(initState, store.dispatch);
+
+// hyperstore.user is one of the Rechyons instances
+console.log(hyperstore.user.name); // get the keyname output "user/name"
+console.log(store[hyperstore.user.name]); // get the value output "zhc"
+
+hyperstore.user.update({ name: "abc", age: 20 }); // change state
+console.log(hyperstore.user.name); // output "abc"
+```
 
 ### Verbose nightmare
 
-Let me give you an example, I want to add a like feature ❤ on the image people post in a social app like twitter. If you have the same nightmare, just omit this part~
+Let me give you an example, I want to add a like feature ❤ on the image people post in a social app like twitter.
 
 ```js
 export default {
@@ -124,129 +289,6 @@ const mapDispatchToProps = dispatch => ({
 In `components/somecomponent.js`, map `dispatch` to `props`.
 
 _Life is too heavy_
-
-### With `rechyons`, you no longer need the verbose lines above at all.
-
-Let's see why
-
-## Usage (About 5-10 minutes to understand, easy than you imagine)
-
-### Install
-
-Support both typescript and javascript
-
-```sh
-$ npm install rechyons
-```
-
-`rechyons` generate action and reducer for each of the state fields. To work with `rechyons`, your state's structure must be `{componentA: {}, componentB: {} ...}`, this is totally reasonable.
-
-```ts
-// store.ts
-import { createStore, combineReducers } from "redux";
-
-import rechyons from "rechyons";
-
-let initState = {
-  user: {
-    name: "zhc",
-    age: 10
-  },
-  animal: {
-    category: "dog",
-    weight: 10
-  }
-};
-
-export let store = createStore(combineReducers(rechyons.reducer(initState)));
-
-export default rechyons(store.dispatch);
-```
-
-`rechyons` has two function `rechyons.reducer()` and `rechyons()`.
-
-First, `rechyons.reducer()` takes your init state to generate `'user/name'`, `'user/age'`, `'animal/category'`, `'animal/weight'` four pair of action and reducer automatically! Then return the reducers to `redux.combineReducers` to create the store.
-
-Then, the `rechyons()` swallow `store.dispatch` to call the designated actions.
-
-```ts
-// TestComponent
-import React from "react";
-import { connect } from "react-redux";
-import superstore from "./store";
-
-export interface Props {
-  name: string;
-}
-
-class TestComponent extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        <button
-          data-testid="button"
-          onClick={() => {
-            superstore.user.update("name", "abc");
-          }}
-        >
-          {this.props.name}
-        </button>
-      </div>
-    );
-  }
-}
-
-const MapStateToProps = store => {
-  return {
-    name: store[superstore.user.name]
-  };
-};
-
-export default connect(MapStateToProps)(TestComponent);
-```
-
-To `MapStateToProps`, just treat `superstore` as your js object `initState`'s structure.To Change user's data, just call `superstore.user.update("name", "newname");`, or use a object if you have multiple datas to update once `superstore.user.update({name: "newname", age: 20});`.
-
-## API
-
-### rechyons.reducer()
-
-```ts
-type ReducerType = { [key: string]: (state: any, action: AnyAction) => any };
-type initStateType = { [key: string]: { [key: string]: any } };
-
-rechyons.reducer: (initState: initStateType) => ReducerType
-```
-
-`rechyons.reducer()` return the reducers generated from initstate, so it only devotes to create redux store.
-
-```ts
-export let store = createStore(combineReducers(rechyons.reducer(initState)));
-```
-
-### rechyons()
-
-```ts
-rechyons: (dispatch: Dispatch<AnyAction>) => { [key: string]: Rechyons }
-```
-
-Each value of `superstore` is a Rechyons instance
-
-```ts
-import superstore, { store } from "./store";
-let superstore = rechyons(store.dispatch);
-
-// superstore.user is one of the Rechyons instances
-console.log(superstore.user.name) // get the keyname output "user/name"
-console.log(store[superstore.user.name]) // get the value output "zhc"
-
-superstore.user.update({"name", "abc"}) // change state
-console.log(superstore.user.name) // output "abc"
-```
 
 ## License
 

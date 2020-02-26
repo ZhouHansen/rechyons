@@ -16,4 +16,4 @@ let initState = {
 
 export let store = createStore(combineReducers(rechyons.reducer(initState)));
 
-export default rechyons(store.dispatch);
+export default rechyons(initState, store.dispatch);

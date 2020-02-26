@@ -3,9 +3,8 @@ import { Dispatch, AnyAction } from "redux";
 type ReducerType = { [key: string]: (state: any, action: AnyAction) => any };
 type initStateType = { [key: string]: { [key: string]: any } };
 
-class Rechyons {
+export class Rechyons {
   [key: string]: any;
-  initState: initStateType;
   constructor(
     name: string,
     initState: initStateType,
@@ -49,18 +48,20 @@ function reducerMapper(initState: initStateType, name: string) {
 }
 
 rechyons.reducer = (initState: initStateType) => {
-  this.initState = initState;
   return Object.keys(initState).reduce((sum: ReducerType, name) => {
     return { ...sum, ...(reducerMapper(initState, name) as ReducerType) };
   }, {});
 };
 
-export default function rechyons(dispatch: Dispatch<AnyAction>) {
-  let r: { [key: string]: Rechyons } = Object.keys(this.initState).reduce(
+export default function rechyons(
+  initState: initStateType,
+  dispatch: Dispatch<AnyAction>
+) {
+  let r: { [key: string]: Rechyons } = Object.keys(initState).reduce(
     (sum, name) => {
       return {
         ...sum,
-        [name]: new Rechyons(name, this.initState, dispatch)
+        [name]: new Rechyons(name, initState, dispatch)
       };
     },
     {}

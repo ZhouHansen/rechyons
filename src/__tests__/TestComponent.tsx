@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import superstore from "./store";
+import hyperstore from "./store";
 
 export interface Props {
   name: string;
@@ -17,7 +17,7 @@ class TestComponent extends React.Component<Props, {}> {
         <button
           data-testid="button"
           onClick={() => {
-            superstore.user.update("name", "abc");
+            hyperstore.user.update("name", "abc");
           }}
         >
           {this.props.name}
@@ -29,7 +29,7 @@ class TestComponent extends React.Component<Props, {}> {
 
 const MapStateToProps = store => {
   return {
-    name: store[superstore.user.name]
+    name: store[hyperstore.user.name]
   };
 };
 
