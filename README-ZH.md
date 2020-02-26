@@ -100,7 +100,7 @@ let initState = {
   },
   // moduleB
   animal: {
-    category: "dog",
+    category: "猫咪",
     weight: 10
   }
 };
