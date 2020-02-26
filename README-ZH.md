@@ -37,7 +37,7 @@ Redux 有一个缺点: 它太啰嗦了，当你需要加一个小功能时，就
 
 ##### 通过`rechyons`, 你再也不用写上述的这一切了
 
-### 使用
+## 使用
 
 [例子](https://github.com/ZhouHansen/rechyons/tree/master/src) 或者 [稍大一点的应用](https://github.com/ZhouHansen/dat-react-shopping-list)
 
@@ -48,7 +48,7 @@ $ yarn install
 $ yarn start
 ```
 
-### 原理 (8 分钟差不多读完, 比你想象简单)
+## 原理 (8 分钟差不多读完, 比你想象简单)
 
 ### 安装
 

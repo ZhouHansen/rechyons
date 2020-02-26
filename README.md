@@ -38,7 +38,7 @@ Actually we bear this disadvantage for [several years](https://community.risings
 
 ##### With `rechyons`, you no longer need the verbose lines above at all
 
-### Usage
+## Usage
 
 [Example](https://github.com/ZhouHansen/rechyons/tree/master/src) or [a little bigger app](https://github.com/ZhouHansen/dat-react-shopping-list)
 
@@ -49,7 +49,7 @@ $ yarn install
 $ yarn start
 ```
 
-### Principle (8 minutes to read, easy than you imagine)
+## Principle (8 minutes to read, easy than you imagine)
 
 ### Install
 
