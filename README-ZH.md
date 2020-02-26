@@ -16,31 +16,30 @@
 [code-style]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard]: https://github.com/feross/standard
 
-#### <center>Redux is no longer verbose, MRGA!</center>
+#### <center>Redux 不再冗长啰嗦, Redux 伟大复兴!</center>
 
-<center>A library allows you use redux without writing actions and reducers, and still keep immutable</center>
-
-[中文文档(Chinese Document)](https://github.com/ZhouHansen/rechyons/blob/master/README-ZH.md)
+<center>有这样一个库让你在使用redux，无需再写reducers和actions，同时保持不可突变性</center>
 
 ## Motivation
 
 <img width=450 src="./for_readme.png"/>
 
-Redux has one disadvantage: it is painfully verbose. Each time we want to add a simple feature, we needed to type a lot of lines for
+重复大量地命名真是很烦人
+Redux 有一个缺点: 它太啰嗦了，当你需要加一个小功能时，就要写很多行：
 
-- constants
-- action types,
-- action creators,
-- action handlers in the reducer
+- 常量名
+- action 类型,
+- action 创建者,
+- reducer，在 reducer 中执行 action
 - ...
 
-Actually we bear this disadvantage for [several years](https://community.risingstack.com/repatch-the-simplified-redux/), and the situation seems to be getting worse. See [verbose nightmare](https://github.com/ZhouHansen/rechyons#verbose-nightmare)
+实际上我们已经忍受这个缺点[好几年了](https://community.risingstack.com/repatch-the-simplified-redux/), 同时情况似乎变得越来越糟糕，当我们不加思考地滥用 redux sagas 和 generator 时，便陷入了[冗长的噩梦](https://github.com/ZhouHansen/rechyons#verbose-nightmare)
 
-##### With `rechyons`, you no longer need the verbose lines above at all
+##### 通过`rechyons`, 你再也不用写上述的这一切了
 
-### Usage
+### 使用
 
-[Example](https://github.com/ZhouHansen/rechyons/tree/master/src) or [a little bigger app](https://github.com/ZhouHansen/dat-react-shopping-list)
+[例子](https://github.com/ZhouHansen/rechyons/tree/master/src) 或者 [稍大一点的应用](https://github.com/ZhouHansen/dat-react-shopping-list)
 
 ```
 $ git clone git@github.com:ZhouHansen/rechyons.git
@@ -49,20 +48,20 @@ $ yarn install
 $ yarn start
 ```
 
-### Principle (8 minutes to read, easy than you imagine)
+### 原理 (8 分钟差不多读完, 比你想象简单)
 
-### Install
+### 安装
 
-Support both typescript and javascript
+支持 typescript 和 javascript
 
 ```sh
 $ npm install rechyons
 ```
 
-### Antecedent
+### 前提
 
 ```json
-// your app tsconfig.json
+// 你的app的tsconfig.json
 {
   "compilerOptions": {
     "strict": false
@@ -70,9 +69,9 @@ $ npm install rechyons
 }
 ```
 
-### Setup redux store and rechyons
+### 启动 redux store 和 rechyons
 
-`rechyons` generate action and reducer for each of the state fields. Shape your initState's structure to this:
+`rechyons` 为每一个 state 数据生成 action 和 reducer。你的 State 的结构需要是这样的:
 
 ```
 {
@@ -81,11 +80,11 @@ $ npm install rechyons
 }
 ```
 
-`rechyons` exports two functions `rechyons.reducer()` and `rechyons()`.
+`rechyons` 出口两个函数 `rechyons.reducer()` 和 `rechyons()`.
 
-`rechyons.reducer()` takes your init state to generate `'user/name'`, `'user/age'`, `'animal/category'`, `'animal/weight'` four pair of action and reducer automatically. Then return the reducers to `redux.combineReducers` to create the store.
+`rechyons.reducer()` 用你的初始 state 自动生成 `'user/name'`, `'user/age'`, `'animal/category'`, `'animal/weight'` 四对 action 和 reducer。 然后返回 reducers 到 `redux.combineReducers`来创建 store.
 
-`rechyons()` swallows `store.dispatch` for calling the designated actions.
+`rechyons()` 吞下 `store.dispatch` 为接下来提交自生成的 action。
 
 ```ts
 // store.ts
@@ -96,7 +95,7 @@ import rechyons from "rechyons";
 let initState = {
   // moduleA
   user: {
-    name: "zhc",
+    name: "小成",
     age: 10
   },
   // moduleB
@@ -111,9 +110,9 @@ export let store = createStore(combineReducers(rechyons.reducer(initState)));
 export default rechyons(initState, store.dispatch);
 ```
 
-### Get, bind and update state in component
+### 在组件中进行数据绑定，获取和修改
 
-`rechyons(initState, store.dispatch)` returns a `hyperstore`, `hyperstore.user` and `hyperstore.animal` both are instances of `Rechyons` class.
+`rechyons(initState, store.dispatch)`返回一个`hyperstore`, `hyperstore.user`和`hyperstore.animal`都是`Rechyons`的实例.
 
 ```ts
 // TestComponent
@@ -136,7 +135,7 @@ class TestComponent extends React.Component<Props, {}> {
         <button
           data-testid="button"
           onClick={() => {
-            hyperstore.user.update("name", "abc");
+            hyperstore.user.update("name", "小汉");
           }}
         >
           {this.props.name}
@@ -155,15 +154,14 @@ const MapStateToProps = store => {
 export default connect(MapStateToProps)(TestComponent);
 ```
 
-#### Get data from state
+#### 从 state 中获取数据
 
-`store[hyperstore.user.name]` equals to `initState.user.name` which is "zhc";
-`store[hyperstore.animal.weight]` equals to `initState.animal.weight` which is 10; So we can use this to `MapStateToProps()`
+`store[hyperstore.user.name]` 等于 `initState.user.name` 等于 "小成";
+`store[hyperstore.animal.weight]` 等于 `initState.animal.weight` 等于 10; 所以我们用这个来进行`MapStateToProps()`
 
-#### Update state
+#### 修改数据
 
-Use `hyperstore.user.update("name", "abc")` or `hyperstore.user.update({"name": "abc"})`，
-`hyperstore.user.update("name", "abc")` 对特指的 action 执行了`store.dispatch({type: "user/name", "abc})`
+使用 `hyperstore.user.update("name", "小汉")` 或者 `hyperstore.user.update({"name": "小汉"})`，`hyperstore.user.update("name", "abc")` 对特指的 action 执行了`store.dispatch({type: "user/name", "abc})`。
 
 ## API
 
@@ -176,7 +174,7 @@ type initStateType = { [key: string]: { [key: string]: any } };
 rechyons.reducer: (initState: initStateType) => ReducerType
 ```
 
-`rechyons.reducer()` return the reducers generated from initstate, so it only devotes to create redux store.
+`rechyons.reducer()` 返回从初始 state 生成的 reducers，它的唯一作用是创建 redux store。
 
 ```ts
 export let store = createStore(combineReducers(rechyons.reducer(initState)));
@@ -188,23 +186,23 @@ export let store = createStore(combineReducers(rechyons.reducer(initState)));
 rechyons: (initState: initStateType, dispatch: Dispatch<AnyAction>) => { [key: string]: Rechyons }
 ```
 
-Each `hyperstore.someModule` is a Rechyons instance
+每一个 `hyperstore,someModule` 都是一个 Rechyons 实例
 
 ```ts
 import hyperstore, { store } from "./store";
 let hyperstore = rechyons(initState, store.dispatch);
 
-// hyperstore.user is one of the Rechyons instances
-console.log(hyperstore.user.name); // get the keyname output "user/name"
-console.log(store[hyperstore.user.name]); // get the value output "zhc"
+// hyperstore.user是一个Rechyons实例
+console.log(hyperstore.user.name); // keyname 等于为 "user/name"
+console.log(store[hyperstore.user.name]); // 通过keyname获得的值为 "小成"
 
-hyperstore.user.update({ name: "abc", age: 20 }); // change state
-console.log(hyperstore.user.name); // output "abc"
+hyperstore.user.update({ name: "小汉", age: 20 }); // 修改数据
+console.log(hyperstore.user.name); // 输出 "小汉"
 ```
 
-### Verbose nightmare
+### 冗长的噩梦
 
-I want to add a like feature ❤ on the image people post in a social app like twitter.
+我想加一个点赞功能 ❤️ 在一款社交 app 上类似微信。
 
 ```js
 export default {
@@ -229,7 +227,7 @@ export default {
 };
 ```
 
-In `models/somemodule.js`, add a generator to commit actions in `effects` object.
+在`models/somemodule.js`的`effects`对象中定义一个 generator 用于提交 action。
 
 ```js
 export function toggleLikeSuccess({ id, isLiked }) {
@@ -243,7 +241,7 @@ export function toggleLikeSuccess({ id, isLiked }) {
 }
 ```
 
-In `actions/somemodule.js`, define a new action.
+在`actions/somemodule.js`,定义一个新的 action.
 
 ```js
 export default {
@@ -276,7 +274,7 @@ export default {
 };
 ```
 
-In `models/somemodule.js`, add a reducer in `reducer` object.
+在`models/somemodule.js`的`reducer`object 对象中加一个 reducer。
 
 ```js
 const mapDispatchToProps = dispatch => ({
@@ -289,9 +287,9 @@ const mapDispatchToProps = dispatch => ({
 });
 ```
 
-In `components/somecomponent.js`, map `dispatch` to `props`.
+在`components/somecomponent.js`，映射`dispatch`到`props`.
 
-_Life is too heavy_
+_人艰不拆_
 
 ## License
 
