@@ -36,6 +36,8 @@ Redux has one disadvantage: it is painfully verbose. Each time we want to add a 
 
 Actually we bear this disadvantage for [several years](https://community.risingstack.com/repatch-the-simplified-redux/), and the situation seems to be getting worse. See [verbose nightmare](https://github.com/ZhouHansen/rechyons#verbose-nightmare)
 
+It's time to rethink how to use redux. [Why you need no Redux Saga](https://medium.com/slido-dev-blog/why-you-need-no-redux-saga-4d4dc46e448)
+
 ##### With `rechyons`, you no longer need the verbose lines above at all
 
 ## Usage
