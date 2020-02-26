@@ -26,7 +26,7 @@
 
 <img width=450 src="./for_readme.png"/>
 
-Redux has one disadvantage: it is painfully verbose. Each time we want to add a simple feature, we needed to type a lot of lines for
+Redux has one disadvantage: it is painfully verbose. Each time we want to add a feature, we needed to type a lot of lines for
 
 - constants
 - action types,

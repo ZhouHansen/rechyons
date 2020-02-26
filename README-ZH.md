@@ -35,6 +35,8 @@ Redux 有一个缺点: 它太啰嗦了，当你需要加一个小功能时，就
 
 实际上我们已经忍受这个缺点[好几年了](https://community.risingstack.com/repatch-the-simplified-redux/), 同时情况似乎变得越来越糟糕，当我们不加思考地滥用 redux sagas 和 generator 时，便陷入了[冗长的噩梦](https://github.com/ZhouHansen/rechyons#verbose-nightmare)
 
+是时候重新思考如何使用 redux 了。 [为什么你不需要 Redux Saga](https://medium.com/slido-dev-blog/why-you-need-no-redux-saga-4d4dc46e448)
+
 ##### 通过`rechyons`, 你再也不用写上述的这一切了
 
 ## 使用
