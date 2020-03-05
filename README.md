@@ -16,7 +16,7 @@
 [code-style]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard]: https://github.com/feross/standard
 
-#### <center>Redux is no longer verbose, MRGA!</center>
+#### <center>Redux is no longer verbose</center>
 
 <center>A library allows you use redux without writing actions and reducers, and still keep immutable</center>
 
