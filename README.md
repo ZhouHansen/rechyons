@@ -22,6 +22,10 @@
 
 [中文文档(Chinese Document)](https://github.com/ZhouHansen/rechyons/blob/master/README-ZH.md)
 
+## Migrate
+
+Because I lost my 2 factor authentic token, this project has moved to https://github.com/zhouhanseng/rechyons
+
 ## Motivation
 
 <img width=450 src="./for_readme.png"/>
@@ -109,13 +113,13 @@ let initState = {
   // moduleA
   user: {
     name: "zhc",
-    age: 10
+    age: 10,
   },
   // moduleB
   animal: {
     category: "dog",
-    weight: 10
-  }
+    weight: 10,
+  },
 };
 
 export let store = createStore(combineReducers(rechyons.reducer(initState)));
@@ -158,9 +162,9 @@ class TestComponent extends React.Component<Props, {}> {
   }
 }
 
-const MapStateToProps = store => {
+const MapStateToProps = (store) => {
   return {
-    name: store[hyperstore.user.name]
+    name: store[hyperstore.user.name],
   };
 };
 
@@ -233,11 +237,11 @@ export default {
         yield call(services.setUnLike, id);
       }
       yield put(toggleLikeSuccess({ id, isLiked }));
-    }
+    },
   },
   reducer: {
     //...
-  }
+  },
 };
 ```
 
@@ -249,8 +253,8 @@ export function toggleLikeSuccess({ id, isLiked }) {
     type: "toggleLikeSuccess",
     payload: {
       id,
-      isLiked
-    }
+      isLiked,
+    },
   };
 }
 ```
@@ -271,33 +275,33 @@ export default {
       const { id, isLiked } = payload;
       return {
         ...state,
-        list: list.map(item => {
+        list: list.map((item) => {
           if (item.id === id) {
             const newLikeNum = isLiked ? item.like_num + 1 : item.like_num - 1;
             return {
               ...item,
               is_liked: isLiked,
-              like_num: newLikeNum > 0 ? newLikeNum : 0
+              like_num: newLikeNum > 0 ? newLikeNum : 0,
             };
           }
           return item;
-        })
+        }),
       };
-    }
-  }
+    },
+  },
 };
 ```
 
 In `models/somemodule.js`, add a reducer in `reducer` object.
 
 ```js
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
   toggleLikeMyImgTxt: compose(
     dispatch,
     // ...
     actions.triggerAction("somemodule/toggleLike")
-  )
+  ),
 });
 ```
 
